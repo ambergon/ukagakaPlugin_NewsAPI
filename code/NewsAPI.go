@@ -37,6 +37,9 @@ type x struct{
 
 func GetNews() {
     apiKey  := Config.API 
+    if apiKey == "" {
+        return
+    }
     url     := "https://newsapi.org/v2/everything"
 
     req, _ := http.NewRequest("GET", url , nil)
