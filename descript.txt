@@ -1,0 +1,15 @@
+Charset,UTF-8
+readme.charset,UTF-8
+readme.readme.md
+type,plugin
+name,ukagakaNewsAPI
+craftman,ambergon
+filename,main.dll
+
+id,16b39498-d011-4477-a7d4-f90706e8aeb6
+
+secondchangeinterval,60
+otherghosttalk,before
+
+//更新url
+//homeurl,
