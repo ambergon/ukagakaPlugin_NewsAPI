@@ -37,6 +37,8 @@ SearchWordには[Everything - Documentation - News API](https://newsapi.org/docs
 "putin -prigozhin"
 //プーチンかトランプが含まれる検索
 "trump OR putin"
+//英単語を複数指定して検索したい。
+"SearchWord"   : "\"3D print\" OR \"3D printer\" OR \"3D printed\"" ,
 ```
 
 
