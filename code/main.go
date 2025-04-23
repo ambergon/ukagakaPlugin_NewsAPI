@@ -12,16 +12,20 @@ import (
     "unsafe"
     "strings"
     "regexp"
+	"strconv"
 )
 
+
+var DIRECTORY string
 func main() {
     fmt.Println( "test" )
+    DIRECTORY = ".."
+    LoadJson()
 }
 
 
 var Count = 0
 
-var Directory string
 var References []string 
 var CheckID         = regexp.MustCompile("^ID: ")
 var CheckReference  = regexp.MustCompile("^Reference.+?: ")
@@ -46,14 +50,14 @@ func GetResponse( r *ResponseStruct ) string {
 //export load
 func load(h C.HGLOBAL, length C.long ) C.BOOL {
     fmt.Println( "load NewsAPI" )
-    Directory = C.GoStringN(( *C.char )( unsafe.Pointer( h )), ( C.int )( length ))
-    fmt.Println( Directory  )
+    DIRECTORY = C.GoStringN(( *C.char )( unsafe.Pointer( h )), ( C.int )( length ))
+    fmt.Println( DIRECTORY  )
 
     //設定読み込み。
     LoadJson()
 
     //ニュース検索開始。
-    go GetNews()
+    go NewsInit()
 
 	C.GlobalFree( h )
 	return C.TRUE
@@ -105,25 +109,27 @@ func request( h C.HGLOBAL, length *C.long ) C.HGLOBAL {
     }
 
     //実行関数
-    if ID == "OnOtherGhostTalk" {
-    } else if ID == "OnSecondChange"  {
-        if Count >= Config.Count && NewsPaper != "" {
-            Value       = NewsPaper
-            OldPaper    = NewsPaper
-            NewsPaper   = ""
+    if ID == "OnMenuExec" {
+        _res := ""
+        _i := 0
+        for( _i < len( News_URL ) ){
+            _res = _res + "\\_a[OnUrlSelect," + News_URL[_i] + "," + strconv.Itoa( _i ) + "]" + News_Title[_i] + "\\_a\\n" 
+            _i++
         }
-        if Count < 999{
-            Count++
+        Value = _res
+    } else if ID == "OnUrlSelect" {
+        _i , err := strconv.Atoi( References[ 1 ] )
+        // 数字に変換できない場合
+        if err != nil { return nil }
+
+        _i++
+        _res := ""
+        // 開いたURL以降の情報を再表示
+        for( _i < len( News_URL ) ){
+            _res = _res + "\\_a[OnUrlSelect," + News_URL[_i] + "," + strconv.Itoa( _i ) + "]" + News_Title[_i] + "\\_a\\n" 
+            _i++
         }
-        //fmt.Println( Count )
-
-    } else if ID == "OnNewsPaperOpenLink"  {
-        Value = "\\j[" + References[0] + "]" + OldPaper
-
-    } else if ID == "OnMenuExec"  {
-        LoadJson()
-        go GetNews()
-
+        Value = "\\j[" + References[ 0 ]+ "]" + _res
     } else {
         //fmt.Println( "no touch :" + ID )
         //fmt.Print( "NOTIFY : " )
