@@ -113,11 +113,11 @@ func request( h C.HGLOBAL, length *C.long ) C.HGLOBAL {
         _res := ""
         _i := 0
         for( _i < len( News_URL ) ){
-            _res = _res + "\\_a[OnUrlSelect," + News_URL[_i] + "," + strconv.Itoa( _i ) + "]" + News_Title[_i] + "\\_a\\n" 
+            _res = _res + "\\_a[OnUrlSelectNewsAPI," + News_URL[_i] + "," + strconv.Itoa( _i ) + "]" + News_Title[_i] + "\\_a\\n" 
             _i++
         }
         Value = _res
-    } else if ID == "OnUrlSelect" {
+    } else if ID == "OnUrlSelectNewsAPI" {
         _i , err := strconv.Atoi( References[ 1 ] )
         // 数字に変換できない場合
         if err != nil { return nil }
@@ -126,7 +126,7 @@ func request( h C.HGLOBAL, length *C.long ) C.HGLOBAL {
         _res := ""
         // 開いたURL以降の情報を再表示
         for( _i < len( News_URL ) ){
-            _res = _res + "\\_a[OnUrlSelect," + News_URL[_i] + "," + strconv.Itoa( _i ) + "]" + News_Title[_i] + "\\_a\\n" 
+            _res = _res + "\\_a[OnUrlSelectNewsAPI," + News_URL[_i] + "," + strconv.Itoa( _i ) + "]" + News_Title[_i] + "\\_a\\n" 
             _i++
         }
         Value = "\\j[" + References[ 0 ]+ "]" + _res
